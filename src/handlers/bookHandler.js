@@ -28,7 +28,7 @@ const addBookHandler = (request, h) => {
       })
       .catch((message) => {
         const response = h.response({
-          status: "error",
+          status: "fail",
           message: `Gagal menambahkan buku. ${message}`,
         });
         response.code(400);
@@ -37,7 +37,7 @@ const addBookHandler = (request, h) => {
       });
   } catch (err) {
     const response = h.response({
-      status: "error",
+      status: "fail",
       message: "Catatan gagal ditambahkan",
     });
     response.code(500);
@@ -64,10 +64,18 @@ const getAllBookHandler = (request) => {
     filteredBooks = books.filter((book) => book.finished == finished);
   }
 
+  const selectedKeys = ["id", "name", "publisher"];
+  const booksWithSelectedKeys = filteredBooks.map((book) =>
+    selectedKeys.reduce((prev, current) => {
+      prev[current] = book[current];
+
+      return prev;
+    }, {})
+  );
   return {
     status: "success",
     data: {
-      books: filteredBooks,
+      books: booksWithSelectedKeys,
     },
   };
 };
@@ -104,14 +112,16 @@ const updateBookByIdHandler = (request, h) => {
       return updateBook(bookId, book)
         .then(() => {
           return {
-            status: "success",
-            data: { message: "Buku berhasil diperbarui" },
+            data: {
+              status: "success",
+              message: "Buku berhasil diperbarui",
+            },
           };
         })
         .catch(() => {
           const response = h.response({
             status: "fail",
-            message: "Buku tidak ditemukan",
+            message: "Gagal memperbarui buku. Id tidak ditemukan",
           });
           response.code(404);
 

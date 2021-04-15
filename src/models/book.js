@@ -16,15 +16,15 @@ const findBookById = (id) => {
 const addBook = (book) => {
   return new Promise((resolve, reject) => {
     const id = nanoid(16);
-    const instertedAt = new Date().toISOString();
-    const updatedAt = instertedAt;
+    const insertedAt = new Date().toISOString();
+    const updatedAt = insertedAt;
     const finished = book.pageCount === book.readPage;
 
     const newBook = {
       id,
       ...book,
       finished,
-      instertedAt,
+      insertedAt,
       updatedAt,
     };
 
