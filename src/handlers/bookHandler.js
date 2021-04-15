@@ -46,10 +46,31 @@ const addBookHandler = (request, h) => {
   }
 };
 
-const getAllBookHandler = () => ({
-  status: "success",
-  data: { books },
-});
+const getAllBookHandler = (request) => {
+  const { name, reading, finished } = request.query;
+  let filteredBooks = books;
+
+  if (name) {
+    filteredBooks = books.filter((book) =>
+      eval(`/${name.toLowerCase()}/`).test(book.name.toLowerCase())
+    );
+  }
+
+  if (reading) {
+    filteredBooks = books.filter((book) => book.reading == reading);
+  }
+
+  if (finished) {
+    filteredBooks = books.filter((book) => book.finished == finished);
+  }
+
+  return {
+    status: "success",
+    data: {
+      books: filteredBooks,
+    },
+  };
+};
 
 const getBookByIDHandler = (request, h) => {
   const { bookId } = request.params;
