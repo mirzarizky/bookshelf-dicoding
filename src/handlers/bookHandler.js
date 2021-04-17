@@ -111,12 +111,10 @@ const updateBookByIdHandler = (request, h) => {
     .then((book) => {
       return updateBook(bookId, book)
         .then(() => {
-          return {
-            data: {
-              status: "success",
-              message: "Buku berhasil diperbarui",
-            },
-          };
+          return h.response({
+            status: "success",
+            message: "Buku berhasil diperbarui",
+          });
         })
         .catch(() => {
           const response = h.response({
@@ -144,10 +142,10 @@ const deleteBookByIdHandler = (request, h) => {
 
   return deleteBook(bookId)
     .then(() => {
-      return {
+      return h.response({
         status: "success",
-        data: { message: "Buku berhasil dihapus" },
-      };
+        message: "Buku berhasil dihapus",
+      });
     })
     .catch(() => {
       const response = h.response({
